@@ -1,5 +1,6 @@
 const fs = require("fs").promises;
 const path = require("path");
+const { v4: uuidv4 } = require("uuid");
 
 const contactsPath = path.resolve("./db/contacts.json");
 
@@ -10,7 +11,7 @@ async function listContacts() {
     console.table(contacts);
     return contacts;
   } catch (error) {
-    throw error;
+    console.log(error.message);
   }
 }
 
@@ -22,7 +23,7 @@ async function getContactById(contactId) {
     console.table(contact);
     return contact;
   } catch (error) {
-    throw error;
+    console.log(error.message);
   }
 }
 
@@ -34,7 +35,7 @@ async function removeContact(contactId) {
     await fs.writeFile(contactsPath, JSON.stringify(updatedContacts, null, 2));
     console.log(`Contact with id ${contactId} has been removed.`);
   } catch (error) {
-    console.error(error);
+    console.log(error.message);
   }
 }
 
@@ -42,13 +43,12 @@ async function addContact(name, email, phone) {
   try {
     const data = await fs.readFile(contactsPath, "utf-8");
     const contacts = JSON.parse(data);
-    const id = contacts.length ? Math.max(...contacts.map((c) => c.id)) + 1 : 1;
-    const newContact = { id, name, email, phone };
+    const newContact = { id: uuidv4(), name, email, phone };
     const updatedContacts = [...contacts, newContact];
     await fs.writeFile(contactsPath, JSON.stringify(updatedContacts, null, 2));
-    console.log(`Contact "${name}" with id ${id} has been added.`);
+    console.log(`Contact "${name}" with id ${newContact.id} has been added.`);
   } catch (error) {
-    console.error(error);
+    console.log(error.message);
   }
 }
 
