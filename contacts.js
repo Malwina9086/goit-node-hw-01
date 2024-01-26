@@ -11,7 +11,7 @@ async function listContacts() {
     console.table(contacts);
     return contacts;
   } catch (error) {
-    console.log(error.message);
+    throw error;
   }
 }
 
@@ -23,7 +23,7 @@ async function getContactById(contactId) {
     console.table(contact);
     return contact;
   } catch (error) {
-    console.log(error.message);
+    throw error;
   }
 }
 
@@ -35,7 +35,7 @@ async function removeContact(contactId) {
     await fs.writeFile(contactsPath, JSON.stringify(updatedContacts, null, 2));
     console.log(`Contact with id ${contactId} has been removed.`);
   } catch (error) {
-    console.log(error.message);
+    throw error;
   }
 }
 
@@ -48,7 +48,7 @@ async function addContact(name, email, phone) {
     await fs.writeFile(contactsPath, JSON.stringify(updatedContacts, null, 2));
     console.log(`Contact "${name}" with id ${newContact.id} has been added.`);
   } catch (error) {
-    console.log(error.message);
+    throw error;
   }
 }
 
